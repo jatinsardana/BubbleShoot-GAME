@@ -3,7 +3,7 @@ import { Link, useFetcher } from "react-router-dom";
 import axios from "axios";
 
 function Navbar({ username, score, highScore, onLogout, ballScore }) {
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(20);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
