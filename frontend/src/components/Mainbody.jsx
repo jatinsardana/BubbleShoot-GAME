@@ -44,7 +44,7 @@ function Mainbody() {
   };
 
   const username = localStorage.getItem("username");
-  const [highScore, setHighScore] = useState(20);
+  const [highScore, setHighScore] = useState(140);
 
   if(totalScore>highScore){
     setHighScore(totalScore)
