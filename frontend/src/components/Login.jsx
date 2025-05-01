@@ -15,7 +15,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/", {
+      const response = await axios.post("https://bubbleshoot-game.onrender.com/", {
         username,
         password,
       });

@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 import router from "./routes/user.route.js";
 
 mongoose
-  .connect(process.env.URI, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
