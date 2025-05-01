@@ -4,7 +4,13 @@ config();
 const app = express();
 app.use(express.json());
 import cors from "cors"
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+  origin: 'https://bubble-shoot-game.vercel.app/', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
+
 
 import mongoose from "mongoose";
 import router from "./routes/user.route.js";
