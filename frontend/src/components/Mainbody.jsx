@@ -8,47 +8,64 @@ function Mainbody() {
   const [totalScore, setTotalScore] = useState(0);
   const [ballScore, setBallScore] = useState(Math.floor(Math.random() * 10));
   const [balls, setBalls] = useState([]);
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      console.log("timer is running");
-      setTimer((prev) => {
-        if (prev === 0) {
-          clearInterval(intervalId);
-          setShowScore(true);
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, []);
+  const [highScore, setHighScore] = useState(140);
+
+  const username = localStorage.getItem("username");
 
   useEffect(() => {
-    const newBalls = [];
-    for (let i = 1; i < 109; i++) {
-      const num = Math.floor(Math.random() * 10);
-      newBalls.push(num);
+    let intervalId;
+    if (!showScore) {
+      intervalId = setInterval(() => {
+        setTimer((prev) => {
+          if (prev === 1) {
+            clearInterval(intervalId);
+            setShowScore(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
+    return () => clearInterval(intervalId);
+  }, [showScore]);
+
+  const generateBalls = () => {
+    const newBalls = Array.from({ length: 108 }, () =>
+      Math.floor(Math.random() * 10)
+    );
     setBalls(newBalls);
+  };
+
+  useEffect(() => {
+    generateBalls();
   }, []);
 
-  function handleClick(num) {
-    if (ballScore == num) {
-      setTotalScore((prevScore) => prevScore + 10);
+  const handleClick = (num) => {
+    if (num === ballScore) {
+      setTotalScore((prev) => prev + 10);
     } else {
-      setTotalScore((prevScore) => prevScore - 5);
+      setTotalScore((prev) => prev - 5);
     }
     setBallScore(Math.floor(Math.random() * 10));
-  }
+  };
 
   const handleLogout = () => {
     console.log("Logged out");
   };
 
-  const username = localStorage.getItem("username");
-  const [highScore, setHighScore] = useState(140);
+  useEffect(() => {
+    if (totalScore > highScore) {
+      setHighScore(totalScore);
+    }
+  }, [totalScore]);
 
-  if(totalScore>highScore){
-    setHighScore(totalScore)
-  }
+  const handleReset = () => {
+    setTimer(20);
+    setTotalScore(0);
+    setBallScore(Math.floor(Math.random() * 10));
+    generateBalls();
+    setShowScore(false);
+  };
 
   return (
     <>
@@ -60,23 +77,31 @@ function Mainbody() {
         ballScore={ballScore}
       />
 
-      {showScore ? (
-        <Score score={totalScore} />
-      ) : (
-        <div className="flex justify-center items-center h-full bg-yellow-200 pt-10">
-          <div className="border-4 border-green-700 w-3/4 h-3/4 p-1 grid grid-cols-12 bg-green-400 rounded-xl mb-10">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-yellow-200 px-4 py-10">
+        {showScore ? (
+          <div className="flex flex-col items-center gap-6">
+            <Score score={totalScore} />
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-green-600 hover:bg-green-700 text-white text-xl font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-300"
+            >
+              Play Again
+            </button>
+          </div>
+        ) : (
+          <div className="w-full max-w-7xl grid grid-cols-12 gap-2 p-4 bg-green-400 border-4 border-green-700 rounded-xl shadow-xl">
             {balls.map((num, index) => (
               <button
                 key={index}
                 onClick={() => handleClick(num)}
-                className="border-2 border-black rounded-full h-11 w-11 flex justify-center mb-1 p-1 font-medium text-2xl cursor-pointer bg-blue-900 text-white hover:bg-black"
+                className="border-2 border-black rounded-full h-14 w-14 flex items-center justify-center text-white bg-blue-900 hover:bg-black transition duration-200 text-xl font-semibold"
               >
                 {num}
               </button>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
