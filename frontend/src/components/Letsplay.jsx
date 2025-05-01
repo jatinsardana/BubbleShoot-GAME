@@ -9,7 +9,7 @@ const LetsPlayButton = () => {
           Ready to Play?
         </h1>
         <p className="text-lg sm:text-xl text-white/80 mb-8">
-          Click below to enter the main game platform!
+          Click below to enter the main game platform
         </p>
         <Link to="/mainbody">
           <button className="relative inline-block text-lg sm:text-xl group">
